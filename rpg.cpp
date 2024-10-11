@@ -9,6 +9,8 @@ struct {
 	int dmg;
 	string name;
 	int critChance;
+	bool dodged;
+	
 }Player1;
 
 struct Enemy{
@@ -76,8 +78,9 @@ int encounter(Enemy enemy) {
 	system("clear");	
 	cout << "You encountered a " << enemy.name << "!" << endl;
 	while (enemy.health > 0 && Player1.health > 0) {
-		cout << Player1.name << " Health: " << Player1.health << endl;
-		cout << enemy.name << " Health: " << enemy.health << endl << endl;
+		Player1.dodged = false;
+		cout << Player1.name << "'s Health: " << Player1.health << endl;
+		cout << enemy.name << "'s Health: " << enemy.health << endl << endl;
 		cout << "Choose your move:" << endl;
 		cout << "1 - Attack" << endl;
 		cout << "2 - Heal" << endl;
@@ -89,16 +92,26 @@ int encounter(Enemy enemy) {
 		if (choice == 1) {
 			attack(enemy);
 		} else if (choice == 2) {
-			cout << "+5 HEALTH" << endl;
+			cout << "You used a health potion! +5 HEALTH" << endl;
 			Player1.health += 5;
 		} else if (choice == 3) {
 			int chance = rand() % Player1.critChance + 1;
 			if (chance == 1) {
 				cout << "YOU DODGED!";
-				//make later
+				Player1.dodged = true;
 			} else {
 				cout << "YOU FAILED TO DODGE!" << endl;
 			}
+		} else if (choice == 4) {
+			
+		} else {
+			string insults[] = {"lol","stupid","oops","Why did you do that?","What?","CRITICAL HIT! you hit the floor.","404 not found"};
+			int i = rand() % 7;
+			cout << insults[i] << endl;
+		}
+		if (Player1.dodged == false) {
+			Player1.health -= enemy.dmg;
+			cout << "You were attacked for " << enemy.dmg << " damage :(" << endl;
 		}
 	}
 	if (Player1.health > 0) { return 0; } else { return 1; }
